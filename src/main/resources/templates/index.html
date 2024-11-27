@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Executor - Steampunk Style</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: #3c3c3c;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #2e2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 800px;
+            text-align: center;
+            border: 2px solid #6f4f37;
+            position: relative;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffb848;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            display: block;
+            color: #c1a899;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #6f4f37;
+            background: #3c3c3c;
+            color: #f1f1f1;
+            font-size: 1em;
+            font-family: 'Courier New', Courier, monospace;
+            resize: none;
+        }
+
+        button {
+            background-color: #ffb848;
+            color: #3c3c3c;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #ff8000;
+            transform: scale(1.05);
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 15px;
+            background: #444;
+            border-radius: 10px;
+            color: #ffb848;
+            font-family: 'Courier New', Courier, monospace;
+            min-height: 100px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #6f4f37;
+        }
+
+        .gear {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: url('https://img.icons8.com/ios/452/gear.png') no-repeat center;
+            background-size: cover;
+            opacity: 0.2;
+            animation: rotateGear 10s linear infinite;
+        }
+
+        .gear1 { top: 10%; left: 5%; }
+        .gear2 { top: 30%; right: 5%; }
+        .gear3 { bottom: 20%; left: 25%; }
+        .gear4 { top: 50%; right: 20%; }
+
+        @keyframes rotateGear {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="gear gear1"></div>
+    <div class="gear gear2"></div>
+    <div class="gear gear3"></div>
+    <div class="gear gear4"></div>
+
+    <h2>SQL Executor</h2>
+    <form id="sqlForm">
+        <label for="query">Enter SQL Query:</label><br/>
+        <textarea id="query" name="query" placeholder="Write your SQL query here..."></textarea>
+        <br/>
+        <button type="button" onclick="executeQuery()">Execute</button>
+    </form>
+    <h3>Result:</h3>
+    <div id="result">Results will appear here.</div>
+</div>
+<script>
+    function executeQuery() {
+        const query = document.getElementById('query').value;
+        fetch('/data/execute', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({ query })
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('result').innerHTML = data;
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = "Error: " + error.message;
+            });
+    }
+</script>
+</body>
+</html>
